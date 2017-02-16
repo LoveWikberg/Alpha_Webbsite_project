@@ -1,4 +1,4 @@
-var geographyQuestions = [
+var questions = [
 {
 question: "Which Turkish city has the name of a cartoon character? ",
 answer: "Batman",
@@ -14,9 +14,6 @@ question: "What is the second largest country in Europe after Russia?",
 answer: "France",
 choice: ["Choose an answer", "Germany", "France", "Ukrain", "Poland"],
 },
-];
-
-var cultureQuestion = [
 {
 question: "What is the first book of the Old Testament?",
 answer: "Genesis",
@@ -29,7 +26,7 @@ choice: ["Choose an answer","London","Brighton","Manchester","Liverpool","North 
 },
 {
 question: "Who did paint the famous painting Guernica?",
-answer: "Picasso",
+answer: "Pablo Picasso",
 choice: ["Choose an answer","Leonardo Da Vinci","Pablo Picasso","Silvio Berlusconi","Claudio Marchisio"],
 },
 {
@@ -37,9 +34,7 @@ question: "In which city did Romeo and Julia live?",
 answer: "Verona",
 choice: ["Choose an answer","Verona","Palermo","Florence","Naples", "Bologna"],
 },
-];
 
-var sportQuestion = [
 {
 question: 'In which italian city is Juventus FCs home ground, "Juventus Stadium", located?',
 answer: "Turin",
@@ -55,126 +50,205 @@ question: "How many Grand Slam titles have Roger Federer won?",
 answer: "18",
 choice: ["Choose an answer","10","12","14","16", "18"],
 },
+{
+question: "Which singer joined Mel Gibson in the movie Mad Max: Beyond The Thunderdome?",
+answer: "Tina Turner",
+choice: ["Choose an answer","Tina Turner","Cher","Nancy Sinatra","Bonnie Tyler"],
+},
+{
+question: "Vodka, Galliano and orange juice are used to make which classic cocktail?",
+answer: "Harvey Wallbanger",
+choice: ["Choose an answer","French 75","Screwdriver","Classic Mimosa","Harvey Wallbanger"],
+},
+{
+question: "On TV, who did the character Lurch work for?",
+answer: "Addams family",
+choice: ["Choose an answer","Burns family","Addams family","The Wahlbergs","The Griffins", "The Cullen clan"],
+},
+{
+question: "What is converted into alcohol during brewing?",
+answer: "Sugar",
+choice: ["Choose an answer","Nitrogen","Hop","Malt","Salt", "Sugar"],
+},
+{
+question: "Which river forms the eastern section of the border between England and Scotland?",
+answer: "Tweed",
+choice: ["Choose an answer","Tweed","Thames","Hudson","Blerch"],
+},
+{
+question: "Name the two families in Romeo and Juliet?",
+answer: "Montague & Capulet",
+choice: ["Choose an answer","Lauren & Capulet","Montague & Capulet","Montague & Lauren","Lauren & Babineaux"],
+},
+{
+question: "For which fruit is the US state of Georgia famous?",
+answer: "Peach",
+choice: ["Choose an answer","Pineapple","Mango","Peach","Apricot","Orange"],
+},
+{
+question: "In which city was Martin Luther King assassinated in 1968?",
+answer: "Memphis, Tennessee",
+choice: ["Choose an answer","Portland, Oregon","St.George, Utah","Memphis, Tennessee"],
+},
 ];
 
-var questionNumber = ["first", "second", "third", "forth", "fifth", "sixth", "seventh", "eight", "ninth", "tenth"];
+var resetQuestions = [];
 
+var beforePlayersSet = [
 
+{
+name: "",
+points: 0,
+},
+{
+name: "",
+points: 0,
+},
+{
+name: "",
+points: 0,
+},
+{
+name: "",
+points: 0,
+},
+];
+var playersArray = [];
+var numberOfPlayers;
 
-function dummy(array){
-	printAll(array);
-	alert(array);
-}
+var playerTurn = 0;
+var questionCounter = 0;
+var antal;
 
-function printAll(array){
-	var html;
-	var category;
-	if (array == 1){
-		category = 'onclick="calculatePoints' + '(geographyQuestions)"';
-		array = geographyQuestions;
-	}
-	else if(array == 2){
-		category = 'onclick="calculatePoints' + '(cultureQuestion)"';
-		array = cultureQuestion;
+function resetAllValues(){
+	questions = [];
+	for(var i=0; i < resetQuestions.length; i++)
+	{
+		questions.push(resetQuestions[i]);
 	}	
-	else if(array == 3){
-		category = 'onclick="calculatePoints' + '(sportQuestion)"';
-		array = sportQuestion;
-	}
+	document.getElementById("printQuestion").innerHTML = "<p></p>";
+    playerTurn = 0;
+    questionCounter = 0;
+}
 
-	for(var i=0; i<array.length; i++){
-		html += test(array, i);
-		html += "<hr>";
+function playAgain(){
+	resetAllValues();
+	getNumberOfPlayers();
+}
 
+function namesToArray(){
+	playersArray = [];
+	for(var i=0; i < antal; i++){
+	var getName = document.getElementById(i.toString()).value;
+	beforePlayersSet[i].name = getName;
+	beforePlayersSet[i].points = 0;
+	playersArray.push(beforePlayersSet[i]);
 	}
-	var dummy = array;
-	html += '<input type="button" value="submit answers"' + category + '></input>';
-	document.getElementById("printTable").innerHTML = html;
+	
+	document.getElementById('printRange').innerHTML = "<p></p>";
+	document.getElementById('printPlayerText').innerHTML = "<p></p>";
+	printAll();
+}
+
+function playernames(){ 
+	antal = document.getElementById("ageInputId").value;
+	var html = "<p>Set player names</p>";
+	for(var i=0; i < antal; i++){
+		html += '<input type="text" placeholder="Player' +(i+1).toString()+' name" id="'+i.toString()+'"><br>';
+	}
+	html += '<input type="button" value="Start" onclick="namesToArray()">';
+	document.getElementById("printPlayerText").innerHTML = html;
+}
+
+function getNumberOfPlayers(){
+	var html = '<form name="registrationForm">';
+	html += "<p>Number of players</p>"
+	html += '<input type="range" name="ageInputName" id="ageInputId" value="1" min="1" onchange="playernames()" max="4" oninput="ageOutputId.value = ageInputId.value">';
+	html += '<output name="ageOutputName" id="ageOutputId">1</output>';
+	html += '</form>';
+	html +=
+	document.getElementById("printRange").innerHTML = html;
+
 }
 
 
-function calculatePoints(arr){
-	
-	var points = 0;
-	for(var i=0; i < arr.length; i++){
-		var value = document.getElementById(questionNumber[i]).value;
-		if(value == arr[i].answer)
-		{
-			points++;
-		}
+
+function printAll(){
+	for(var i=0; i < questions.length; i++)
+	{
+		resetQuestions.push(questions[i]);
 	}
-	document.getElementById("printCorrect").innerHTML = "<p> Correct answers: " + points + "</p>";
+	play();
 }
 
-function test(array, index){
-	var html = "<p><b>" + array[index].question + "</b></p>";
+function calculatePoints(index){
+	var value = document.getElementById("answer").value;
+	if(value == questions[index].answer)
+	{
+		playersArray[playerTurn].points += 1;
+		/*if(playerTurn === 1)
+		playerOnePoint += 1;
+		else if (playerTurn === 2)
+		playerTwoPoint += 1;*/
+	}
+	if(playerTurn < (playersArray.length-1))
+		playerTurn += 1;
+	else if (playerTurn === (playersArray.length-1))
+		playerTurn = 0;
 	
-	html += '<select text="hej" id="' + questionNumber[index] + '">';
-	for(var x=0; x < array[index].choice.length; x++){
-		html += '<option value="' +array[index].choice[x]+ '">' +array[index].choice[x]+ '</option>' 
+	questions.splice(index,1);
+	questionCounter += 1;
+	play();
+}
+
+function printQuestion(index){
+	
+	var html = "<p><b>" + questions[index].question + "</b></p>";
+	html += '<select text="hej" id="answer">';
+	for(var x=0; x < questions[index].choice.length; x++){
+		html += '<option value="' +questions[index].choice[x]+ '">' +questions[index].choice[x]+ '</option>' 
 	}
 	html += "</select><br>";
 	return html;
 }
 
-function randomQuestion(){
-	var questionArray = [];
-	var test = Math.floor((Math.random() * 4) + 1);
-	if (test == 1)
-	{questionArray = geographyQuestions.slice()}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-function testTwo(index){
-	var html = "<p><b>" + questions[index].question + "</b></p>";
-	html += '<form id="' + questionNumber[index] + '">';
-	for(i=0; questions[index].choice.length; i++){
-		html += '<input type="radio" value="' +questions[index].choice[i]+ '">' + questions[index].choice[i] +	'</br>';
+function play(){
+	var html = "<p>";
+	for(var i=0; i < playersArray.length; i++){
+		html += playersArray[i].name + ": " + playersArray[i].points + "   ";
 	}
-	html += "</form>"
-	return html;
-}*/
-
-/*
-function testResult(){
-	for(var i=0; i < questions.length; i++){
-		testAgain(i);
+	html += "</p>";
+	
+	if(questionCounter < (playersArray.length*5))
+	{	
+		html += "<p>" + playersArray[playerTurn].name + ", it's your turn!</p>";
+		
+		var randomNumber = Math.floor((Math.random() * questions.length) + 1);	
+		randomNumber -= 1;		
+		html += printQuestion(randomNumber);		
+		var category = 'onclick="calculatePoints('+randomNumber+')"';		
+		html += '<input type="button" value="Next"' + category + '></input>';
+		document.getElementById("printQuestion").innerHTML = html;
 	}
-	document.getElementById("printCorrect").innerHTML = "<p>" + correctA + "</p>";
-}
-
-
-function testAgain(index){
-	//var radios = []; //= document.getElementsByName(names[index]);
-	var radios = +$('input[name="' +names[index]+ '"]:checked').val();
-	if(radios == questions[index].answer)
-	{
-		correctA++;
-	}
-/*
-	for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) {
-		if(radios[i] = questions[i].answer){
-			correctA++;
-			alert("tja");
-			break;
+	else
+	{	
+		
+		var ppp = [];
+		for(var x=0; x < playersArray.length; x++){
+			ppp.push(playersArray[x].points);
 		}
-        // do whatever you want with the checked radio
-        //alert(radios[i].value);
-    }
+		var largest = Math.max.apply( Math, ppp );
+		
+		var gameEnd = "";
+		for(var i=0; i < playersArray.length; i++){
+			if (playersArray[i].points === largest)
+			{	
+			gameEnd = "<h3>" +playersArray[i].name+ " wins!!!</h3><br>";
+			break;
+			}
+		}
+	
+		gameEnd += '<input type="button" value="PLAY AGAIN!" onclick="playAgain()"></input>'
+		document.getElementById("printQuestion").innerHTML = gameEnd;
 	}
-}*/
+}

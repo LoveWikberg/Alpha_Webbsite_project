@@ -5,16 +5,16 @@
 	</head>
 	<body>
 	<h1>Quiz</h1>
-	<input type="button" value="test" onclick="randomQuestion(1)">
-	<input type="button" value="Geography" onclick="printAll(1)">
-	<input type="button" value="Culture" onclick="printAll(2)">
-	<input type="button" value="Sports" onclick="printAll(3)">
-	<input type="button" value="Video games" onclick="printAll(4)">
-
-	<div id="printTable"></div>
+	<!--<input type="button" value="Start" onclick="randomQuestion()">-->
+	<input type="button" value="Start" id="start" onclick="getNumberOfPlayers()">
+	<div id="printRange"></div>
+	<div id="printPlayerText"></div>
+	
+	<div id="printPoints"></div>
+	<div id="printQuestion"></div>
 	
 	<!--<input type="button" value="submit answers" onclick="calculatePoints(geographyQuestions)"></input>-->
-	<div id="printCorrect"></div>
+	
 	
 	<script type='text/javascript' src="js/quiz.js"></script>
 	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
