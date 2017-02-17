@@ -1,0 +1,46 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+	<title> Quiz </title>
+	<link rel="stylesheet" style="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	</head>
+	
+	<body onload="startTime2()" align="center">
+
+<a href="../../index.html"><img src="../../img/alpha.png" alt="ERROR PIC NOT FOUND!" style="width:600px;height:200px;"></a>
+	<br>
+	<ul class="topnav" id="myTopnav">
+  <li><a class="active" href="../../index.html">Home</a></li>
+  <li><a href="../../Games.html">Games</a></li>
+  <li><a href="../../Contact.html">Contact</a></li>
+  <li class="icon">
+    <a href="javascript:void(0);" style="font-size:15px;" onclick="myFunction()">☰</a>
+  </li>
+</ul>
+
+<script src="../../js/main.js"></script>
+<br><img src="../../img/quizlogo.png" alt="ERROR PIC NOT FOUND!" style="width:300px;height:150px;"> <br>
+	<!--<input type="button" value="Start" onclick="randomQuestion()">-->
+	<input type="button" value="Start" id="start" onclick="getNumberOfPlayers()" class="buttonDesign">
+	
+	<div class="startDesign">
+	<div id="printRange"></div>
+	<div id="printPlayerText"></div>
+	</div>
+	
+	<div class="tableDesign">
+	<div id="printPoints"></div>
+	<div id="printQuestion"></div>
+	</div>
+	
+	<!--<input type="button" value="submit answers" onclick="calculatePoints(geographyQuestions)"></input>-->
+
+<footer class="footer">
+<p id="both"></p>
+</footer>
+
+	<script type='text/javascript' src="js/quiz.js"></script>
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+	</body>
+</html>
