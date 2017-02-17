@@ -90,12 +90,86 @@ question: "In which city was Martin Luther King assassinated in 1968?",
 answer: "Memphis, Tennessee",
 choice: ["Choose an answer","Portland, Oregon","St.George, Utah","Memphis, Tennessee"],
 },
+{
+question: "In which country did the Mau Mau uprising (1952-60) occur?",
+answer: "Kenya",
+choice: ["Choose an answer","Kenya","China","Botswana", "Vietnam", "Belize"],
+},
+{
+question: "What does a numismatist study or collect?",
+answer: "Coins",
+choice: ["Choose an answer","Stamps","Antiques","Dolls", "Coins"],
+},
+{
+question: "Which guitarist is known as Slowhand?",
+answer: "Eric Clapton",
+choice: ["Choose an answer","Yngwie Malmsteen","Santana","Jimi Hendrix", "Eric Clapton", "Les Paul"],
+},
+{
+question: "Which is the capital of India?",
+answer: "New Delhi",
+choice: ["Choose an answer","Bangladesh","Bombay","Calcutta", "New Delhi"],
+},
+{
+question: "In which film did Roger Moore first play James Bond?",
+answer: "Live and let die",
+choice: ["Choose an answer","Live and let die","The spy who loved me","Moonraker", "Diamonds are forever"],
+},
+{
+question: "In which bay is Alcatraz?",
+answer: "San Francisco bay",
+choice: ["Choose an answer","Santa Monica bay","Monterey bay","Alamitos bay", "San Francisco bay", "San Diego bay"],
+},
+{
+question: "The Merseyside derby is a derby between which two football teams in the Barcleys Premier League?",
+answer: "Everton & Liverpool",
+choice: ["Choose an answer","Liverpool & Manchester United","Everton & Liverpool","Arsenal & Liverpool", "Liverpool & Newcastle"],
+},
+{
+question: "Who had a 1985 hit with Saving All My Love For You?",
+answer: "Whitney Houston",
+choice: ["Choose an answer","Dolly Parton","Whitney Houston","Celine Dion"],
+},
+{
+question: "In Roman mythology, Neptune is the equivalent to which Greek god?",
+answer: "Poseidon",
+choice: ["Choose an answer","Poseidon","Ares","Hades","Zeus","Hermes"],
+},
+{
+question: "Which of the answers is >NOT< a titan in the Greek mythology?",
+answer: "Eros",
+choice: ["Choose an answer","Cronos","Theia","Oceanus","Atlas","Eros"],
+},
+{
+question: "Complete the name of the American Football team: 'Washington ...........'?",
+answer: "Redskins",
+choice: ["Choose an answer","Penguins","Whitecaps","Redskins","Panthers","Capitals"],
+},
+{
+question: "What is Canada's national animal?",
+answer: "Beaver",
+choice: ["Choose an answer","Beaver","Brown bear","Carcajou","Bald Eagle"],
+},
+{
+question: "Name the largest freshwater lake in the world?",
+answer: "Lake Superior",
+choice: ["Choose an answer","Caspian Sea","Lake Victoria","Lake Tanganyika","Lake Superior"],
+},
+{
+question: "What kind of weapon is a falchion?",
+answer: "Sword",
+choice: ["Choose an answer","Rifle","Catapult","Sword"],
+},
+{
+question: "Name the seventh planet from the sun.",
+answer: "Uranus",
+choice: ["Choose an answer","Neptune","Jupiter","Earth","Saturn"],
+},
 ];
 
 var resetQuestions = [];
 
 var beforePlayersSet = [
-
 {
 name: "",
 points: 0,
@@ -118,7 +192,6 @@ var numberOfPlayers;
 
 var playerTurn = 0;
 var questionCounter = 0;
-var antal;
 
 function resetAllValues(){
 	questions = [];
@@ -138,7 +211,7 @@ function playAgain(){
 
 function namesToArray(){
 	playersArray = [];
-	for(var i=0; i < antal; i++){
+	for(var i=0; i < numberOfPlayers; i++){
 	var getName = document.getElementById(i.toString()).value;
 	beforePlayersSet[i].name = getName;
 	beforePlayersSet[i].points = 0;
@@ -151,9 +224,9 @@ function namesToArray(){
 }
 
 function playernames(){ 
-	antal = document.getElementById("ageInputId").value;
+	numberOfPlayers = document.getElementById("ageInputId").value;
 	var html = "<p>Set player names</p>";
-	for(var i=0; i < antal; i++){
+	for(var i=0; i < numberOfPlayers; i++){
 		html += '<input type="text" placeholder="Player' +(i+1).toString()+' name" id="'+i.toString()+'"><br>';
 	}
 	html += '<input type="button" value="Start" onclick="namesToArray()">';
@@ -247,7 +320,11 @@ function play(){
 			break;
 			}
 		}
-	
+		
+		for(var i=0; i < playersArray.length; i++){
+			gameEnd += "<p>" +playersArray[i].name+ "    Points: " + playersArray[i].points+ "</p>";
+		}
+		
 		gameEnd += '<input type="button" value="PLAY AGAIN!" onclick="playAgain()"></input>'
 		document.getElementById("printQuestion").innerHTML = gameEnd;
 	}
