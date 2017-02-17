@@ -247,9 +247,10 @@ function namesToArray(){
 	questionsPerPlayer = document.getElementById("numberOfQuestions").value;
 	playersArray = [];
 	for(var i=0; i < numberOfPlayers; i++){
-	var getName = document.getElementById(i.toString()).value;
+	var getName = document.getElementById(i).value;
 	beforePlayersSet[i].name = getName;
 	beforePlayersSet[i].points = 0;
+	beforePlayersSet[i].print = true;
 	playersArray.push(beforePlayersSet[i]);
 	}
 	
@@ -285,7 +286,6 @@ function progressBar(){
 	html+= '</div>';
 	return html;
 }
-
 
 function startGame(){
 	for(var i=0; i < questions.length; i++)
@@ -352,9 +352,11 @@ function gameCycle(){
 			while(ind != 0)
 			{
 				for(var i=0; i < playersArray.length; i++){
-					if(playersArray[i].points == pointArray[(ind-1)]){
-					var percent = convertToPercent(i);
-					gameEnd += "<p>" +playersArray[i].name+ "    Points: " + playersArray[i].points+ "/"+questionsPerPlayer+" ("+percent+"%)</p>";
+					//playersArray.print is used avoid printing the same player several times.
+					if(playersArray[i].points == pointArray[(ind-1)] && playersArray[i].print == true){
+						playersArray[i].print = false;
+						var percent = convertToPercent(i);
+						gameEnd += "<p>" +playersArray[i].name+ "    Points: " + playersArray[i].points+ "/"+questionsPerPlayer+" ("+percent+"%)</p>";
 					}
 				}
 				ind-=1;
@@ -402,9 +404,6 @@ function calculatePoints(index){
 	questionCounter += 1;
 	gameCycle();
 }
-
-
-
 
 function convertToPercent(index){
 	var percent = (playersArray[index].points / questionsPerPlayer) * 100;
