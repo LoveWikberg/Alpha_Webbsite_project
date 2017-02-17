@@ -5,7 +5,7 @@ answer: "Batman",
 choice: ["Choose an answer", "Batman", "Gu'lachmet", "Ful al Shem", "Demir"],
 },
 {
-question: "What is the largest state of the United States?",
+question: "Which is the largest state of the United States?",
 answer: "Alaska",
 choice: ["Choose an answer", "California", "Alaska", "Texas", "North Dakota"],
 },
@@ -163,7 +163,7 @@ choice: ["Choose an answer","Rifle","Catapult","Sword"],
 {
 question: "Name the seventh planet from the sun.",
 answer: "Uranus",
-choice: ["Choose an answer","Neptune","Jupiter","Earth","Saturn"],
+choice: ["Choose an answer","Neptune","Jupiter","Earth","Uranus","Saturn"],
 },
 {
 question: "What's the name of this building?",
@@ -216,6 +216,47 @@ var numberOfPlayers;
 
 var playerTurn = 0;
 var questionCounter = 0;
+var questionsPerPlayer = 0;
+
+function getNumberOfPlayers(){
+	var html = '<form name="registrationForm">';
+	html += "<p>Number of players</p>"
+	html += '<input type="range" id="numPlayers" value="1" min="1" onchange="playernames()" max="4" oninput="numPlayersOutput.value = numPlayers.value">';
+	html += '<output id="numPlayersOutput">1</output>';
+	html += "<p>Number of questions per player</p>"
+	html += '<input type="range" id="numberOfQuestions" value="5" min="1" max="10" oninput="numberOfQuestionsOutput.value = numberOfQuestions.value">';
+	html += '<output id="numberOfQuestionsOutput">5</output>';
+	html += '</form>';
+	document.getElementById("printRange").innerHTML = html;
+	playernames();
+	document.getElementById("start").style.visibility = "hidden";
+
+}
+
+function playernames(){ 
+	numberOfPlayers = document.getElementById("numPlayers").value;
+	var html = "<p>Set player names</p>";
+	for(var i=0; i < numberOfPlayers; i++){
+		html += '<input type="text" placeholder="Player' +(i+1).toString()+' name" id="'+i.toString()+'"><br>';
+	}
+	html += '<input type="button" class="buttonDesign" value="Start" onclick="namesToArray()">';
+	document.getElementById("printPlayerTextInput").innerHTML = html;
+}
+
+function namesToArray(){
+	questionsPerPlayer = document.getElementById("numberOfQuestions").value;
+	playersArray = [];
+	for(var i=0; i < numberOfPlayers; i++){
+	var getName = document.getElementById(i.toString()).value;
+	beforePlayersSet[i].name = getName;
+	beforePlayersSet[i].points = 0;
+	playersArray.push(beforePlayersSet[i]);
+	}
+	
+	document.getElementById('printRange').innerHTML = "<p></p>";
+	document.getElementById('printPlayerTextInput').innerHTML = "<p></p>";
+	startGame();
+}
 
 function resetAllValues(){
 	questions = [];
@@ -233,68 +274,96 @@ function playAgain(){
 	getNumberOfPlayers();
 }
 
-function namesToArray(){
-	playersArray = [];
-	for(var i=0; i < numberOfPlayers; i++){
-	var getName = document.getElementById(i.toString()).value;
-	beforePlayersSet[i].name = getName;
-	beforePlayersSet[i].points = 0;
-	playersArray.push(beforePlayersSet[i]);
-	}
-	
-	document.getElementById('printRange').innerHTML = "<p></p>";
-	document.getElementById('printPlayerText').innerHTML = "<p></p>";
-	printAll();
+
+function progressBar(){
+	var numberOfQuestions = (playersArray.length*questionsPerPlayer);
+	var html = "";
+	html+= '<div id="myProgress">';
+	html+= '<div id="myBar">';
+    html+= '<div id="label">'+questionCounter+'/'+numberOfQuestions+'</div>';
+	html+= '</div>';
+	html+= '</div>';
+	return html;
 }
 
-function playernames(){ 
-	numberOfPlayers = document.getElementById("ageInputId").value;
-	var html = "<p>Set player names</p>";
-	for(var i=0; i < numberOfPlayers; i++){
-		html += '<input type="text" placeholder="Player' +(i+1).toString()+' name" id="'+i.toString()+'"><br>';
-	}
-	html += '<input type="button" class="buttonDesign" value="Start" onclick="namesToArray()">';
-	document.getElementById("printPlayerText").innerHTML = html;
-}
 
-function getNumberOfPlayers(){
-	var html = '<form name="registrationForm">';
-	html += "<p>Number of players</p>"
-	html += '<input type="range" name="ageInputName" id="ageInputId" value="1" min="1" onchange="playernames()" max="4" oninput="ageOutputId.value = ageInputId.value">';
-	html += '<output name="ageOutputName" id="ageOutputId">1</output>';
-	html += '</form>';
-	html +=
-	document.getElementById("printRange").innerHTML = html;
-	document.getElementById("start").style.visibility = "hidden";
-
-}
-
-function printAll(){
+function startGame(){
 	for(var i=0; i < questions.length; i++)
 	{
 		resetQuestions.push(questions[i]);
 	}
-	play();
+	gameCycle();
 }
 
-function calculatePoints(index){
-	var value = document.getElementById("answer").value;
-	if(value == questions[index].answer)
-	{
-		playersArray[playerTurn].points += 1;
-		/*if(playerTurn === 1)
-		playerOnePoint += 1;
-		else if (playerTurn === 2)
-		playerTwoPoint += 1;*/
-	}
-	if(playerTurn < (playersArray.length-1))
-		playerTurn += 1;
-	else if (playerTurn === (playersArray.length-1))
-		playerTurn = 0;
+function gameCycle(){
+	var html = progressBar();
 	
-	questions.splice(index,1);
-	questionCounter += 1;
-	play();
+	html += "<h3>";
+	for(var i=0; i < playersArray.length; i++){
+		html += playersArray[i].name + ": " + playersArray[i].points + "  ";
+	}
+	html += "</h3>";
+	
+	if(questionCounter < (playersArray.length*questionsPerPlayer))
+	{	
+		html += "<p> <mark>" + playersArray[playerTurn].name + ", it's your turn!</mark></p><br>";
+		
+		var randomNumber = Math.floor((Math.random() * questions.length) + 1);	
+		randomNumber -= 1;		
+		html += printQuestion(randomNumber);		
+		var category = 'onclick="calculatePoints('+randomNumber+')"';		
+		html += '<br>' + '<input type="button" class="buttonDesign" value="Next"' + category + '<br>' + ' </input>';
+		document.getElementById("printQuestion").innerHTML = html;
+		var percentProgress = ((questionCounter) / (playersArray.length*questionsPerPlayer))*100;
+		document.getElementById("myBar").style.width = percentProgress+"%"
+	}
+	else
+	{	
+		var	pointArray = [];
+		for(var x=0; x < playersArray.length; x++){
+			pointArray[x] = playersArray[x].points;
+		}		
+		var largest = Math.max.apply( Math, pointArray );
+		pointArray.sort();
+		
+		var gameEnd = "";
+		
+		if(playersArray.length == 1){
+				var percent = convertToPercent(0);
+				gameEnd += "<p>Points: " + playersArray[0].points+ "/"+questionsPerPlayer+"</p>";
+				gameEnd += '<p>You got '+percent.toString()+'% of the answers right.</p>';
+		}
+		else
+		{	
+			if(pointArray[(pointArray.length-1)] == pointArray[(pointArray.length-2)]){
+				gameEnd = "<h3> It's a draw! </h3><br>";
+			}			
+			else
+			{		
+				for(var i=0; i < playersArray.length; i++){
+					if (playersArray[i].points === largest)
+					{	
+					gameEnd = "<h3>" +playersArray[i].name+ " wins!!!</h3><br>";
+					break;
+					}
+				}
+			}
+			var ind = playersArray.length;
+			while(ind != 0)
+			{
+				for(var i=0; i < playersArray.length; i++){
+					if(playersArray[i].points == pointArray[(ind-1)]){
+					var percent = convertToPercent(i);
+					gameEnd += "<p>" +playersArray[i].name+ "    Points: " + playersArray[i].points+ "/"+questionsPerPlayer+" ("+percent+"%)</p>";
+					}
+				}
+				ind-=1;
+			}
+		}
+		
+		gameEnd += '<input type="button" class="buttonDesign" value="Play again" onclick="playAgain()"></input>'
+		document.getElementById("printQuestion").innerHTML = gameEnd;
+	}
 }
 
 function printQuestion(index){
@@ -318,54 +387,27 @@ function printQuestion(index){
 	return html;
 }
 
-function play(){
-	var html = "<h3>";
-	for(var i=0; i < playersArray.length; i++){
-		html += playersArray[i].name + ": " + playersArray[i].points + "  ";
+function calculatePoints(index){
+	var value = document.getElementById("answer").value;
+	if(value == questions[index].answer)
+	{
+		playersArray[playerTurn].points += 1;
 	}
-	html += "</h3>";
+	if(playerTurn < (playersArray.length-1))
+		playerTurn += 1;
+	else if (playerTurn === (playersArray.length-1))
+		playerTurn = 0;
 	
-	if(questionCounter < (playersArray.length*5))
-	{	
-		html += "<p> <mark>" + playersArray[playerTurn].name + ", it's your turn!</mark></p><br>";
-		
-		var randomNumber = Math.floor((Math.random() * questions.length) + 1);	
-		randomNumber -= 1;		
-		html += printQuestion(randomNumber);		
-		var category = 'onclick="calculatePoints('+randomNumber+')"';		
-		html += '<br>' + '<input type="button" class="buttonDesign" value="Next"' + category + '<br>' + ' </input>';
-		document.getElementById("printQuestion").innerHTML = html;
-	}
-	else
-	{	
-		var	pointArray = [];
-		for(var x=0; x < playersArray.length; x++){
-			pointArray.push(playersArray[x].points);
-		}
-		
-		var largest = Math.max.apply( Math, pointArray );
-		pointArray.sort();
-		
-		var gameEnd = "";
-		if(pointArray[0] == pointArray[1]){
-			gameEnd = "<h3> It's a draw! </h3><br>";
-		}
-		
-		else{
-		
-		for(var i=0; i < playersArray.length; i++){
-			if (playersArray[i].points === largest)
-			{	
-			gameEnd = "<h3>" +playersArray[i].name+ " wins!!!</h3><br>";
-			break;
-			}
-		}
-		}
-		for(var i=0; i < playersArray.length; i++){
-			gameEnd += "<p>" +playersArray[i].name+ "    Points: " + playersArray[i].points+ "</p>";
-		}
-		
-		gameEnd += '<input type="button" class="buttonDesign" value="Play again" onclick="playAgain()"></input>'
-		document.getElementById("printQuestion").innerHTML = gameEnd;
-	}
+	questions.splice(index,1);
+	questionCounter += 1;
+	gameCycle();
+}
+
+
+
+
+function convertToPercent(index){
+	var percent = (playersArray[index].points / questionsPerPlayer) * 100;
+				var percentToString = percent.toString().substring(0,4);
+				return percentToString;
 }

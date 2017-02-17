@@ -1,6 +1,7 @@
 var questions = [
 {
 question: "Which Turkish city has the name of a cartoon character? ",
+picture: "images/test.jpg",
 answer: "Batman",
 choice: ["Choose an answer", "Batman", "Gu'lachmet", "Ful al Shem", "Demir"],
 },
@@ -165,6 +166,30 @@ question: "Name the seventh planet from the sun.",
 answer: "Uranus",
 choice: ["Choose an answer","Neptune","Jupiter","Earth","Saturn"],
 },
+{
+question: "What's the name of this building?",
+picture: "images/tajMahal.jpg",
+answer: "Taj Mahal",
+choice: ["Choose an answer", "Sacré-Coeur", "Hagia Sophia", "Taj Mahal", "Mahabat Maqbara"],
+},
+{
+question: "Who's this?",
+picture: "images/liamHemsworth.jpg",
+answer: "Liam Hemsworth",
+choice: ["Choose an answer", "Liam Hemsworth", "Ashton Kutcher", "Channing Tatum", "Ian Somerhalder"],
+},
+{
+question: "What car is this?",
+picture: "images/camaro.jpg",
+answer: "Chevrolet Camaro",
+choice: ["Choose an answer", "Ford GT", "Pontiac Firebird", "Ford Mustang", "Chevrolet Camaro"],
+},
+{
+question: "Which company has this logo?",
+picture: "images/motorola.jpg",
+answer: "Motorola",
+choice: ["Choose an answer", "Move", "Motorola", "Migros", "Marley", "Mazda"],
+},
 ];
 
 var resetQuestions = [];
@@ -199,7 +224,7 @@ function resetAllValues(){
 	{
 		questions.push(resetQuestions[i]);
 	}	
-	document.getElementById("printQuestion").innerHTML = "<p></p>";
+	document.getElementById("printQuiz").innerHTML = "<p></p>";
     playerTurn = 0;
     questionCounter = 0;
 }
@@ -209,7 +234,9 @@ function playAgain(){
 	getNumberOfPlayers();
 }
 
+//When number of players and player names are set - add player names to array and set each score to 0.
 function namesToArray(){
+	//Set the array to null before adding values 
 	playersArray = [];
 	for(var i=0; i < numberOfPlayers; i++){
 	var getName = document.getElementById(i.toString()).value;
@@ -220,9 +247,10 @@ function namesToArray(){
 	
 	document.getElementById('printRange').innerHTML = "<p></p>";
 	document.getElementById('printPlayerText').innerHTML = "<p></p>";
-	printAll();
+	startQuiz();
 }
 
+//Shows a number of name inputs depending on the value from the range input in getNumberOfPlayers().
 function playernames(){ 
 	numberOfPlayers = document.getElementById("ageInputId").value;
 	var html = "<p>Set player names</p>";
@@ -233,6 +261,7 @@ function playernames(){
 	document.getElementById("printPlayerText").innerHTML = html;
 }
 
+//User get to set number of players.
 function getNumberOfPlayers(){
 	var html = '<form name="registrationForm">';
 	html += "<p>Number of players</p>"
@@ -246,7 +275,8 @@ function getNumberOfPlayers(){
 
 
 
-function printAll(){
+function startQuiz(){
+	//Copies all values in the question-array for reset at resetAllValues().
 	for(var i=0; i < questions.length; i++)
 	{
 		resetQuestions.push(questions[i]);
@@ -254,29 +284,40 @@ function printAll(){
 	play();
 }
 
+//Check if player answer is correct and if so - add one point to player score.
+//When answer is checked - change player turn and repeat the game cycle (play()).
 function calculatePoints(index){
 	var value = document.getElementById("answer").value;
 	if(value == questions[index].answer)
 	{
 		playersArray[playerTurn].points += 1;
-		/*if(playerTurn === 1)
-		playerOnePoint += 1;
-		else if (playerTurn === 2)
-		playerTwoPoint += 1;*/
 	}
 	if(playerTurn < (playersArray.length-1))
 		playerTurn += 1;
 	else if (playerTurn === (playersArray.length-1))
 		playerTurn = 0;
 	
+	//Remove the current question to avoid repetition.
 	questions.splice(index,1);
 	questionCounter += 1;
 	play();
 }
 
+//Print question, choices and a "next" button to submit player answer.
 function printQuestion(index){
 	
 	var html = "<p><b>" + questions[index].question + "</b></p>";
+	
+	//Print picture if the current question has an img element.
+	if(questions[index].picture != null){
+		html += '<div class="dropdown">';
+		html += '<img src="'+questions[index].picture.toString()+'" alt="ERROR - picture not found" style="width:250px;height:170px;"><br>';
+		html += '<div class="dropdown-content">';
+		html += '<img src="'+questions[index].picture.toString()+'" style = "width:400px;height:300px;">';
+		html += '</div>';
+		html += '</div>';
+	}
+	
 	html += '<select text="hej" id="answer">';
 	for(var x=0; x < questions[index].choice.length; x++){
 		html += '<option value="' +questions[index].choice[x]+ '">' +questions[index].choice[x]+ '</option>' 
@@ -287,25 +328,25 @@ function printQuestion(index){
 
 function play(){
 	var html = "<p>";
+	//Print each player's point.
 	for(var i=0; i < playersArray.length; i++){
 		html += playersArray[i].name + ": " + playersArray[i].points + "   ";
 	}
 	html += "</p>";
 	
+	//Repeat game cycle until each player have answered five questions.
 	if(questionCounter < (playersArray.length*5))
 	{	
 		html += "<p>" + playersArray[playerTurn].name + ", it's your turn!</p>";
-		
 		var randomNumber = Math.floor((Math.random() * questions.length) + 1);	
 		randomNumber -= 1;		
 		html += printQuestion(randomNumber);		
 		var category = 'onclick="calculatePoints('+randomNumber+')"';		
 		html += '<input type="button" value="Next"' + category + '></input>';
-		document.getElementById("printQuestion").innerHTML = html;
+		document.getElementById("printQuiz").innerHTML = html;
 	}
 	else
 	{	
-		
 		var ppp = [];
 		for(var x=0; x < playersArray.length; x++){
 			ppp.push(playersArray[x].points);
@@ -326,6 +367,6 @@ function play(){
 		}
 		
 		gameEnd += '<input type="button" value="PLAY AGAIN!" onclick="playAgain()"></input>'
-		document.getElementById("printQuestion").innerHTML = gameEnd;
+		document.getElementById("printQuiz").innerHTML = gameEnd;
 	}
 }
