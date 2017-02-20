@@ -10,7 +10,8 @@ function myFunction() {
 
 
 /* Clock and Date*/
-function startTimeAndDate() {
+/* Clock and Date*/
+function startTime2() {
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -30,6 +31,7 @@ function startTimeAndDate() {
 	if(mm<10) {
 		mm='0'+mm
 } 
+
 
 document.getElementById('both').innerHTML =
 dd +'/'+ mm +'-'+ yyyy + ' | ' + h + ":" + m + ":" + s;

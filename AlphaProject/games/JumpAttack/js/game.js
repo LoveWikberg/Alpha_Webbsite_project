@@ -322,10 +322,18 @@ function update() {
 	//I left a "hole" at the end of the level to leave the canvas playingfield
 	
 	if (player.x > canvas.width){
-		alert("You win!"); 
+		document.getElementById('sound2').play();
+		 sleep(5000).then(() => {
+    alert("You win!");
 		document.location.reload();
+});
+		
 	}
 		
+}
+
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 //This is the collision check method that uses the math object
