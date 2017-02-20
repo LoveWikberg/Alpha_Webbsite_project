@@ -253,6 +253,7 @@ var playerTurn = 0;
 var questionCounter = 0;
 var questionsPerPlayer = 0;
 
+//User set number of players and questions.
 function getNumberOfPlayers(){
 	var html = '<form name="registrationForm">';
 	html += "<p>Number of players</p>"
@@ -264,23 +265,28 @@ function getNumberOfPlayers(){
 	html += '</form>';
 	document.getElementById("printRange").innerHTML = html;
 	playernames();
+	//Hide start button
 	document.getElementById("start").style.visibility = "hidden";
 
 }
 
+//Print a number (depending on how many players that are set) of name inputs.
 function playernames(){ 
 	numberOfPlayers = document.getElementById("numPlayers").value;
 	var html = "<p>Set player names</p>";
 	for(var i=0; i < numberOfPlayers; i++){
 		html += '<input type="text" placeholder="Player' +(i+1).toString()+' name" id="'+i.toString()+'"><br>';
 	}
-	html += '<input type="button" class="buttonDesign" value="Start" onclick="namesToArray()">';
+	html += '<input type="button" class="buttonDesign" value="Start" onclick="valuesToArray()">';
 	document.getElementById("printPlayerTextInput").innerHTML = html;
 }
 
-function namesToArray(){
+//Add user-set values to playersArray.
+function valuesToArray(){
 	questionsPerPlayer = document.getElementById("numberOfQuestions").value;
+	//Nullifies the playersArray
 	playersArray = [];
+	
 	for(var i=0; i < numberOfPlayers; i++){
 	var getName = document.getElementById(i).value;
 	beforePlayersSet[i].name = getName;
@@ -291,13 +297,14 @@ function namesToArray(){
 	beforePlayersSet[i].correct = [];
 	playersArray.push(beforePlayersSet[i]);
 	}
-	
+	// Hides the table where the user set player and question values.
 	document.getElementById('printRange').innerHTML = "<p></p>";
 	document.getElementById('printPlayerTextInput').innerHTML = "<p></p>";
 	startGame();
 }
 
 function resetAllValues(){
+	//Nullify the questions array and then reset it to its' initial value.
 	questions = [];
 	for(var i=0; i < resetQuestions.length; i++)
 	{
@@ -309,12 +316,13 @@ function resetAllValues(){
 }
 
 function playAgain(){
+	//Hide key
 	document.getElementById("printKey").innerHTML = "<p></p>";
 	resetAllValues();
 	getNumberOfPlayers();
 }
 
-
+//Show the progress of the quiz.
 function progressBar(){
 	var numberOfQuestions = (playersArray.length*questionsPerPlayer);
 	var html = "";
@@ -327,6 +335,7 @@ function progressBar(){
 }
 
 function startGame(){
+	//Copy the questions array to resetQuestions array which is used in resetAllValues().
 	for(var i=0; i < questions.length; i++)
 	{
 		resetQuestions.push(questions[i]);
@@ -336,14 +345,8 @@ function startGame(){
 
 function gameCycle(){
 	var html = progressBar();
-	/*html += "<p>Points</p>";
-	html += "<h3>";
-	for(var i=0; i < playersArray.length; i++){
-		html += "<score>" + playersArray[i].name + ": " + playersArray[i].points + " </score>";
-		document.getElementById("printQuestion").innerHTML = html;
-	}
-	html += "</h3>";*/
 	
+	//Print new question while questionCounter is lower than the total amount of questions.
 	if(questionCounter < (playersArray.length*questionsPerPlayer))
 	{	
 		if(playersArray.length > 1)
@@ -357,29 +360,35 @@ function gameCycle(){
 		var percentProgress = ((questionCounter) / (playersArray.length*questionsPerPlayer))*100;
 		document.getElementById("myBar").style.width = percentProgress+"%"
 	}
+	//When all questions are answered, print score and keys.
 	else
-	{	
+	{	//pointArray store the point of each player.
 		var	pointArray = [];
 		for(var x=0; x < playersArray.length; x++){
 			pointArray[x] = playersArray[x].points;
 		}		
+		//Find the largest value of the pointArray.
 		var largest = Math.max.apply( Math, pointArray );
+		//Sort the pointArray from lowest to highest value. 
 		pointArray.sort();
 		
 		var gameEnd = "";
-		
+		//This is printed if there's only one player.
 		if(playersArray.length == 1){
 				var percent = convertToPercent(0);
 				gameEnd += "<p>Points: " + playersArray[0].points+ "/"+questionsPerPlayer+"</p>";
 				gameEnd += '<p>You got '+percent.toString()+'% of the answers right.</p><input type="button" value="Show answers" onclick="printKey(0)"</input>';
 		}
+		//This is printed if there's more than one player.
 		else
 		{	
+			//If the two highest values are equal, game is a draw.
 			if(pointArray[(pointArray.length-1)] == pointArray[(pointArray.length-2)]){
 				gameEnd = "<h3> It's a draw! </h3><br>";
-			}			
+			}		
+			//This is printed if there is only one player with the highest score.
 			else
-			{		
+			{		//Show winner
 				for(var i=0; i < playersArray.length; i++){
 					if (playersArray[i].points === largest)
 					{	
@@ -388,11 +397,13 @@ function gameCycle(){
 					}
 				}
 			}
-			var ind = playersArray.length;
-			while(ind != 0)
+		var ind = playersArray.length;
+		//This while-loop prints the score of each player with the highest score at the top
+		//and the lowest score at the bottom.
+		while(ind != 0)
 			{
 				for(var i=0; i < playersArray.length; i++){
-					//playersArray.print is used avoid printing the same player several times.
+					//playersArray.print is used to avoid printing the same player several times.
 					if(playersArray[i].points == pointArray[(ind-1)] && playersArray[i].print == true){
 						playersArray[i].print = false;
 						var percent = convertToPercent(i);
@@ -408,6 +419,7 @@ function gameCycle(){
 	}
 }
 
+//Print the question, correct answer and player answer.
 function printKey(index){
 	html = "";
 	for(var i=0; i < playersArray[index].question.length; i++){
@@ -421,7 +433,7 @@ function printKey(index){
 function printQuestion(index){
 	
 	var html = "<p><b>" + questions[index].question + "</b></p>";
-	
+	//If the question contains a picture, print the picture.
 	if(questions[index].picture != null){
 		html += '<div class="dropdown">';
 		html += '<img src="'+questions[index].picture.toString()+'" alt="ERROR - picture not found" style="width:250px;height:170px;"><br>';
@@ -430,7 +442,7 @@ function printQuestion(index){
 		html += '</div>';
 		html += '</div>';
 	}
-	
+	//The answers are shown in a dropdown.
 	html += '<select text="hej" id="answer">';
 	html += '<option>Choose an answer</option>';
 	for(var x=0; x < questions[index].choice.length; x++){
@@ -440,6 +452,7 @@ function printQuestion(index){
 	return html;
 }
 
+//Check if player answer is correct and if so, add one point to playersArray[playerTurn].points.
 function calculatePoints(index){
 	var value = document.getElementById("answer").value;
 	if(value == questions[index].answer)
@@ -450,18 +463,21 @@ function calculatePoints(index){
 	playersArray[playerTurn].correct.push(questions[index].answer);
 	playersArray[playerTurn].answer.push(value);
 	
+	//Set player turn.
 	if(playerTurn < (playersArray.length-1))
 		playerTurn += 1;
 	else if (playerTurn === (playersArray.length-1))
 		playerTurn = 0;
-	
+	//Remove question from the questions array to avoid repetition of the question.
 	questions.splice(index,1);
 	questionCounter += 1;
 	gameCycle();
 }
 
+//Return the amount of correct answers in percent.
 function convertToPercent(index){
 	var percent = (playersArray[index].points / questionsPerPlayer) * 100;
+				//The percent variable is cut down to five characters to avoid excessive decimals.
 				var percentToString = percent.toString().substring(0,4);
 				return percentToString;
 }

@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <title>Alpha-Contact</title> 
-<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
-<body onload="startTime2()">
+
+<body onload="startTimeAndDate()">
 
 <a href="index.html"><img src="img/alpha.png" alt="ERROR PIC NOT FOUND!" style="width:600px;height:200px;"></a>
 
 <ul class="topnav" id="myTopnav">
   <li><a class="active" href="index.html">Home</a></li>
   <li><a href="Games.html">Games</a></li>
-  <li><a href="Contact.html">Contact</a></li>
+  <li><a class="choosen" href="Contact.html">Contact</a></li>
   <li class="icon">
     <a href="javascript:void(0);" style="font-size:15px;" onclick="myFunction()">☰</a>
   </li>
@@ -20,7 +22,7 @@
 
 <br>
  <form class="form-container" name="form1" ACTION="http://juhax.com/dotnet/kontakt2/contact.php" METHOD="post" >
- <br>
+<br>
  <div class="form-title">Reason of contacting us</div>
 	<select class="form-field" name="subjects">
 		<option value="Complaints">Complaints</option>
@@ -28,26 +30,26 @@
 		<option value="Dating">Dating Staff</option>
 		<option value="Suggestions">Suggestions</option>
 	</select>
-  <div class="form-title">Name:</div>
+	<div class="form-title">Name:</div>
  <input class="form-field" type="text" name="name" placeholder="Alexander Holmberg" required="required"></input><br>
-   <div class="form-title">Email:</div>
+	<div class="form-title">Email:</div>
  <input class="form-field" type="email" id="email" name="email" value="" placeholder="AlexHotStuff@example.com" required="required"></input><br>
   <div class="form-title">Password:</div>
  <input class="form-field" type="password" name="password" placeholder="*****" required="required"></input><br>
- <div class="form-title">Message:</div>
+	<div class="form-title">Message:</div>
  <textarea id="message"  name="message" cols="110" ROWS="6" style="width:290px" placeholder="Enter your message here..." required="required"></textarea><br>
  <hr>
-	 <div class="submit-container">
-	<input class="submit-button" TYPE="submit" name="skicka" VALUE="Send message">
-	<input class="submit-button" TYPE="reset" name="Rensa" VALUE="Clear">
+	<div class="submit-container">
+ <input class="submit-button" TYPE="submit" name="skicka" VALUE="Send message">
+ <input class="submit-button" TYPE="reset" name="Rensa" VALUE="Clear">
 	</div>
-	</td></tr></table>
-	</form>
+</form>
+	
 <script src="js/main.js"></script>
-
+<br>
 <footer class="footer">
-<p id="both"></p>
-
+	<p id="both"></p>
 </footer>
+
 </body>
 </html>

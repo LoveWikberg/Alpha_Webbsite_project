@@ -23,10 +23,10 @@ ul.topnav li a {
 
 ul.topnav li a:hover {background-color: #555;}
 
-/* Gömmer list-items när det är en liten skärm så de kan öppnas med drop-down funktionen istället */
+/* Hides list-items and opens drop-down function when the screen goes small */
 ul.topnav li.icon {display: none;}
 
-/* När skärmen är mindre än 680 pixlar så göms list-items förutom Home(first-child). Visar navbar som öppnar och ständer länkarna. */
+/* When screen is lesser than 680px it hides all items in list except first-child(Home) */
 @media screen and (max-width:680px) {
   ul.topnav li:not(:first-child) {display: none;}
   ul.topnav li.icon {
@@ -35,7 +35,7 @@ ul.topnav li.icon {display: none;}
   }
 }
 
-/* "responsive" classen är till för navbar när man trycker på drop-down iconen för att det ska se snyggare ut med liten skärm. Använder Javascript för att starta */
+/* "responsive" class is for when you press the drop-down icon and to make it look good. Uses Javascript to start */
 @media screen and (max-width:680px) {
   ul.topnav.responsive {position: relative;}
   ul.topnav.responsive li.icon {
@@ -59,8 +59,10 @@ margin:0 auto;
 display:block;
 }
 
-/* Massa styling för contact-formuläret */
+/* Styling for contact-form, used a styling generator */
 .form-container {
+   text-align: center;
+   margin: auto;
    border: 1px solid #000000;
    background: #241e24;
    background: -webkit-gradient(linear, left top, left bottom, from(#454544), to(#241e24));
@@ -188,3 +190,10 @@ body {
   padding-bottom: 4.2rem;
   min-height: 100%;
 }
+
+a.choosen {
+  background-color: #8c8c8c;
+  color: #ffffff;
+  cursor: default;
+}
+
