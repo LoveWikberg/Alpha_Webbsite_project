@@ -4,8 +4,12 @@ body {
 	color: white;
 }
 
-#myProgress {
+score{
+	border: 2px;
+	border-style: solid;
+}
 
+#myProgress {
   margin-left: 130px;
   width: 65%;
   background-color: #ddd;
@@ -24,7 +28,7 @@ body {
 }
 
 mark {
-	background-color: grey;
+	background-color: red;
 }
 
 .tableDesign {
